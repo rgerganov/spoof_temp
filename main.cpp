@@ -173,7 +173,7 @@ int main(int argc, char *argv[])
     uint8_t id = 244;
     int8_t humidity = 20, channel = 1;
     int freq = 433968400;
-    int tx_gain = 0;
+    int tx_gain = 20;
     string fname;
 
     while ((opt = getopt(argc, argv, "i:c:t:h:o:f:x:")) != -1) {
