@@ -1,4 +1,4 @@
-// freq = 432890 kHz
+// freq = 433968400 Hz
 #include <string>
 #include <vector>
 #include <cstdint>
@@ -52,7 +52,7 @@ void save_to_file(const string &fname, vector<T> &out)
     fclose(f);
 }
 
-const int sample_rate = 250000;
+const int sample_rate = 2000000;
 const int symbol_rate = 2000;
 
 int main(int argc, char *argv[])
@@ -116,7 +116,7 @@ int main(int argc, char *argv[])
     nibbles[7] = (humidity >> 4) & 0x0f;
     nibbles[8] = humidity & 0x0f;
 
-    for (int k = 0 ; k < 4 ; k++) {
+    for (int k = 0 ; k < 12 ; k++) {
         add_sync(data);
         for (int i = 0 ; i < 9 ; i++) {
             uint8_t mask = 0x08;
@@ -131,14 +131,6 @@ int main(int argc, char *argv[])
         }
     }
 
-    // half second pause
-    for (int i = 0 ; i < sample_rate/2 ; i++) {
-        out_cu8.push_back(127); 
-        out_cu8.push_back(127); 
-        out_cs8.push_back(0); 
-        out_cs8.push_back(0); 
-    }
-
     int spb = sample_rate / symbol_rate; // samples per bit
     for (int i = 0 ; i < data.size() ; i++) {
         for (int j = 0 ; j < spb ; j++) {
@@ -147,14 +139,6 @@ int main(int argc, char *argv[])
             out_cs8.push_back(data[i] ? 127 : 0);
             out_cs8.push_back(0);
         }
-    }
-
-    // half second pause
-    for (int i = 0 ; i < sample_rate/2 ; i++) {
-        out_cu8.push_back(127); 
-        out_cu8.push_back(127); 
-        out_cs8.push_back(0); 
-        out_cs8.push_back(0); 
     }
 
     save_to_file(fname + ".cu8", out_cu8);
