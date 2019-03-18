@@ -1,4 +1,4 @@
-Command line program for spoofing the outdoor sensor for this temperature station:
+Command line program for spoofing the outdoor sensor for this temperature station (sold by [LIDL](https://www.google.com/search?q=lidl+temperature+station)):
 
 ![spoof](/temp_station.png)
 
@@ -33,7 +33,7 @@ ID: 244, channel: 1, temperature: 12.30, humidity: 40
 Saving to test.cu8
 Saving to test.cs8
 
-$ ./rtl_433 -s 2000000 -r test.cu8 
+$ rtl_433 -s 2000000 -r test.cu8
 rtl_433 version 18.12-134-g64139f3 branch master at 201903110821 inputs file rtl_tcp
 [...]
 Test mode active. Reading samples from file: test.cu8
