@@ -30,6 +30,7 @@ Testing with rtl_433
 ```bash
 $ spoof_temp -t 12.3 -h 40 -o test
 ID: 244, channel: 1, temperature: 12.30, humidity: 40
+Saving to test.sub
 Saving to test.cu8
 Saving to test.cs8
 
@@ -42,3 +43,7 @@ time      : @0.069540s
 model     : Nexus Temperature/Humidity             House Code: 244
 Channel   : 1            Battery   : OK            Temperature: 12.30 C      Humidity  : 40 %
 ```
+
+FlipperZero
+---
+Run the program with `-o` and then copy the `.sub` file to fhe Flipper's SD card.

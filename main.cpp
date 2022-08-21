@@ -11,6 +11,7 @@
 
 using namespace std;
 
+const int DEFAULT_FREQ = 433968400;
 const int SAMPLE_RATE = 2000000;
 const int SYMBOL_RATE = 2000;
 
@@ -157,6 +158,45 @@ static void stop_tx()
     }
 }
 
+void save_sub(const string &fname, int freq) {
+    printf("Saving to %s\n", fname.c_str());
+    FILE *f = fopen(fname.c_str(), "w");
+    fprintf(f, "Filetype: Flipper SubGhz RAW File\n"
+               "Version: 1\n"
+               "Frequency: %d\n"
+               "Preset: FuriHalSubGhzPresetOok650Async\n"
+               "Protocol: RAW", freq);
+    int one_len = 500;
+    int zero_len = 500;
+
+    int prev_bit = -1;
+    int prev_len = 0;
+    vector<int> raw_data;
+    for (int i = 0; i < (int)data.size(); i++) {
+        if (prev_bit >= 0 && prev_bit != data[i]) {
+            raw_data.push_back(prev_len);
+            prev_len = 0;
+        }
+        if (data[i]) {
+            prev_len += one_len;
+        } else {
+            prev_len -= zero_len;
+        }
+        prev_bit = data[i];
+    }
+    raw_data.push_back(prev_len);
+    if (prev_bit) {
+        raw_data.push_back(-zero_len);
+    }
+    for (int i = 0; i < (int)raw_data.size(); i++) {
+        if (i % 512 == 0) {
+            fprintf(f, "\nRAW_Data: ");
+        }
+        fprintf(f, "%d ", raw_data[i]);
+    }
+    fclose(f);
+}
+
 template<typename T>
 void save_to_file(const string &fname, vector<T> &out)
 {
@@ -172,7 +212,7 @@ int main(int argc, char *argv[])
     float temp_f = 26.3;
     uint8_t id = 244;
     int8_t humidity = 20, channel = 1;
-    int freq = 433968400;
+    int freq = DEFAULT_FREQ;
     int tx_gain = 20;
     string fname;
 
@@ -235,6 +275,7 @@ int main(int argc, char *argv[])
     generate_samples();
 
     if (!fname.empty()) {
+        save_sub(fname + ".sub", freq);
         save_to_file(fname + ".cu8", out_cu8);
         save_to_file(fname + ".cs8", out_cs8);
         return 0;
