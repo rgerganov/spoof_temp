@@ -47,3 +47,5 @@ Channel   : 1            Battery   : OK            Temperature: 12.30 C      Hum
 FlipperZero
 ---
 Run the program with `-o` and then copy the `.sub` file to fhe Flipper's SD card.
+
+Demo on [Twitter](https://twitter.com/rgerganov/status/1561303946211336195).
